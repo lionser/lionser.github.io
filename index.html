@@ -1,0 +1,765 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Calculator</title>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <form id="form" action="">
+                <div class="form-group">
+                    <label for="service">Стоимость услуг</label>
+                    <input id="service" class="form-control" type="number" name="service"
+                           placeholder="Стоимость услуг" value="800" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="insurance">Страховка груза</label>
+                    <input id="insurance" class="form-control" type="number" name="insurance"
+                           placeholder="Страховка груза" value="50" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="delivery_ua">Эвакуатор (Одеса - Киев)</label>
+                    <input id="delivery_ua" class="form-control" type="number" name="delivery_ua"
+                           placeholder="Эвакуатор" value="160" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="broker">Брокер</label>
+                    <input id="broker" class="form-control" type="number" name="broker"
+                           placeholder="Брокер" value="200" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="sertification">Сертификация</label>
+                    <input id="sertification" class="form-control" type="number" name="sertification"
+                           placeholder="Брокер" value="215" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="forwarder">Экспедитор</label>
+                    <input id="forwarder" class="form-control" type="number" name="forwarder"
+                           placeholder="Брокер" value="380" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="current_year">Текущий год</label>
+                    <input id="current_year" class="form-control" type="number" name="current_year"
+                           placeholder="Текущий год" value="2021">
+                </div>
+                <div class="form-group">
+                    <label for="car_year">Год авто</label>
+                    <input id="car_year" class="form-control" type="number" name="car_year" placeholder="Год авто"
+                           value="2017">
+                </div>
+                <div class="form-group">
+                    <label for="car_engine">Обьем двигателя</label>
+                    <input id="car_engine" class="form-control" type="number" name="car_engine"
+                           placeholder="Обьем двигателя" value="2.4">
+                </div>
+                <div class="form-group">
+                    <label for="auction_place">Локация аукциона</label>
+                    <input id="auction_place" class="form-control" type="text" name="auction_place"
+                           placeholder="Локация аукциона" value="Fontana (CA)">
+                </div>
+                <div class="form-group">
+                    <div class="form-check form-check-inline">
+                        <input id="auction_type_copart" class="form-check-input" type="radio" name="auction_type">
+                        <label class="form-check-label" for="auction_type_copart">Copart</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input id="auction_type_iaai" class="form-check-input" type="radio" name="auction_type" checked>
+                        <label class="form-check-label" for="auction_type_iaai">IAAI</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="tax">Разтоможка</label>
+                    <input id="tax" class="form-control" type="number" name="tax" placeholder="Разтоможка" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="bank">Переводы банка</label>
+                    <input id="bank" class="form-control" type="number" name="bank" placeholder="Переводы банка"
+                           disabled>
+                </div>
+                <div class="form-group">
+                    <label for="auction_tax">Сборы аукциона</label>
+                    <input id="auction_tax" class="form-control" type="number" name="auction_tax"
+                           placeholder="Сборы аукциона" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="auction_rate">Ставка аукциона</label>
+                    <input id="auction_rate" class="form-control" type="number" name="auction_rate"
+                           placeholder="Ставка аукциона" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="registration">Постановка на учет</label>
+                    <input id="registration" class="form-control" type="number" name="registration"
+                           placeholder="Поставновка на учет" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="repairs_cost">Цена ремонта</label>
+                    <input id="repairs_cost" class="form-control" type="number" name="repairs_cost"
+                           placeholder="Цена ремонта">
+                </div>
+                <div class="form-group">
+                    <label for="total_cost">Итоговая стоимость</label>
+                    <input id="total_cost" class="form-control" type="number" name="total_cost"
+                           placeholder="Итоговая стоимость">
+                </div>
+                <button type="submit" class="btn btn-primary">Посчитать</button>
+            </form>
+        </div>
+        <div class="col-md-6">
+            <ul>
+                <li>Цена услуг: 800</li>
+                <li>Страховка 50</li>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+
+<script>
+    const InternetFee = 129;
+    const GatewayFee  = 30;
+
+    const CopartFees = new Map()
+        .set(1, [0.01, 49.99])
+        .set(1, [50.00, 99.99])
+        .set(25, [100.00, 199.99])
+        .set(50, [200.00, 299.99])
+        .set(75, [300.00, 349.99])
+        .set(75, [350.00, 399.99])
+        .set(110, [400.00, 449.99])
+        .set(110, [450.00, 499.99])
+        .set(125, [500.00, 549.99])
+        .set(130, [550.00, 599.99])
+        .set(140, [600.00, 699.99])
+        .set(155, [700.00, 799.99])
+        .set(170, [800.00, 899.99])
+        .set(185, [900.00, 999.99])
+        .set(200, [1000.00, 1199.99])
+        .set(225, [1200.00, 1299.99])
+        .set(240, [1300.00, 1399.99])
+        .set(250, [1400.00, 1499.99])
+        .set(260, [1500.00, 1599.99])
+        .set(275, [1600.00, 1699.99])
+        .set(285, [1700.00, 1799.99])
+        .set(300, [1800.00, 1999.99])
+        .set(325, [2000.00, 2399.99])
+        .set(335, [2400.00, 2499.99])
+        .set(350, [2500.00, 2999.99])
+        .set(400, [3000.00, 3499.99])
+        .set(450, [3500.00, 3999.99])
+        .set(475, [4000.00, 4499.99])
+        .set(500, [4500.00, 4999.99])
+        .set(525, [5000.00, 5999.99])
+        .set(550, [6000.00, 7499.99])
+        .set(575, [7500.00, 9999.99])
+        .set(600, [10000.00, 14999.99]);
+
+    const IaaiFees = new Map()
+        .set(1, [0.00, 99.99])
+        .set(40, [100.00, 199.99])
+        .set(60, [200.00, 299.99])
+        .set(75, [300.00, 349.99])
+        .set(90, [350.00, 399.99])
+        .set(100, [400.00, 499.99])
+        .set(130, [500.00, 599.99])
+        .set(145, [600.00, 699.99])
+        .set(160, [700.00, 799.99])
+        .set(175, [800.00, 899.99])
+        .set(190, [900.00, 999.99])
+        .set(205, [1000.00, 1099.99])
+        .set(220, [1000.00, 1199.99])
+        .set(230, [1200.00, 1299.99])
+        .set(240, [1300.00, 1399.99])
+        .set(255, [1400.00, 1499.99])
+        .set(270, [1500.00, 1599.99])
+        .set(290, [1600.00, 1699.99])
+        .set(300, [1700.00, 1799.99])
+        .set(310, [1800.00, 1999.99])
+        .set(325, [2000.00, 2199.99])
+        .set(330, [2200.00, 2399.99])
+        .set(345, [2400.00, 2499.99])
+        .set(360, [2500.00, 2999.99])
+        .set(400, [3000.00, 3499.99])
+        .set(450, [3500.00, 3999.99])
+        .set(475, [4000.00, 4499.99])
+        .set(500, [4500.00, 4999.99])
+        .set(525, [5000.00, 5999.99])
+        .set(550, [6000.00, 7499.99])
+        .set('500 + 1%', [7500.00, 19999.99])
+        .set('4%', [20000.00]);
+
+</script>
+
+<script>
+    const CopartDeliveryMap = new Map()
+        .set('ABILENE - TX', 1125)
+        .set('AK - ANCHORAGE', 2000)
+        .set('ALBANY - NY', 950)
+        .set('ALBUQUERQUE - NM', 1250)
+        .set('ALTOONA - PA', 1050)
+        .set('AMARILLO - TX', 1175)
+        .set('ANDREWS - TX', 1225)
+        .set('ANTELOPE - CA', 1265)
+        .set('APPLETON - WI', 1275)
+        .set('ATLANTA - GA', 910)
+        .set('ATLANTA EAST - GA', 935)
+        .set('ATLANTA NORTH - GA', 960)
+        .set('ATLANTA SOUTH - GA', 935)
+        .set('ATLANTA WEST - GA', 935)
+        .set('AUSTIN - TX', 1000)
+        .set('BAKERSFIELD - CA', 1165)
+        .set('BALTIMORE - MD', 950)
+        .set('BATON ROUGE - LA', 1085)
+        .set('BILLINGS MT', 1715)
+        .set('BIRMINHAM AL', 1135)
+        .set('BOISE - ID', 1515)
+        .set('BUFFALO - NY', 1125)
+        .set('CANDIA - NH', 1075)
+        .set('CARTERSVILLE - GA', 960)
+        .set('CASPER - WY', 1815)
+        .set('CHAMBERSBURG - PA', 1025)
+        .set('CHARLESTON - SC', 910)
+        .set('CHARLESTON - WV', 1185)
+        .set('CHICAGO - IL', 1175)
+        .set('CHICAGO NORTH - IL', 1175)
+        .set('CHICAGO SOUTH - IL', 1175)
+        .set('CHINA GROVE - NC', 960)
+        .set('CLEVELAND - OH', 1110)
+        .set('CLEVELAND EAST - OH', 1110)
+        .set('CLEVELAND WEST - OH', 1110)
+        .set('COLORADO SPRINGS - CO', 1440)
+        .set('COLUMBIA - SC', 910)
+        .set('COLUMBUS - OH', 1100)
+        .set('CORPUS CHRISTI - TX', 1050)
+        .set('CRASHEDTOYS ATLANTA', 935)
+        .set('CRASHEDTOYS DALLAS- TX', 1000)
+        .set('CRASHEDTOYS EAST BE - MN', 1325)
+        .set('CRASHEDTOYS ELDRIDGE - IA', 1475)
+        .set('CRASHEDTOYS MINNEA -MN', 1500)
+        .set('CRASHEDTOYS SACRAM - CA', 1290)
+        .set('CULPEPER - VA', 1085)
+        .set('DALLAS - TX', 1000)
+        .set('DALLAS SOUTH - TX', 1000)
+        .set('DANVILLE - VA', 1000)
+        .set('DAVENPORT - IA', 1225)
+        .set('DAYTON - OH', 1160)
+        .set('DENVER - CO', 1440)
+        .set('DENVER CENTRAL - CO', 1440)
+        .set('DENVER SOUTH - CO', 1440)
+        .set('DES MOINES - IA', 1250)
+        .set('DETROIT - MI', 1100)
+        .set('EDMONTON - AB', 2400)
+        .set('EL PASO - TX', 1150)
+        .set('EUGENE - OR', 1415)
+        .set('EXETER - RI', 1000)
+        .set('FAYETTEVILLE - AR', 1175)
+        .set('FLINT - MI', 1175)
+        .set('FORT WAYNE - IN', 1260)
+        .set('FREDERICKSBURG - VA', 975)
+        .set('FREMONT - CA', 1240)
+        .set('FRESNO - CA', 1190)
+        .set('FT. PIERCE - FL', 1005)
+        .set('FT. WORTH - TX', 1000)
+        .set('GLASSBORO EAST - NJ', 900)
+        .set('GLASSBORO WEST - NJ', 945)
+        .set('GRAHAM - WA', 1415)
+        .set('GREER - SC', 960)
+        .set('HALIFAX - NS', 1825)
+        .set('HAMMOND - IN', 1150)
+        .set('HAMPTON - VA', 1075)
+        .set('HARISBURG - PA', 975)
+        .set('HARTFORD - CT', 940)
+        .set('HARTFORD SPRINGFIELD - CT', 950)
+        .set('HAYWARD - CA', 1290)
+        .set('HELENA - MT', 1790)
+        .set('HONOLULU - HI', 2540)
+        .set('HOUSTON - TX', 975)
+        .set('INDIANAPOLIS - IN', 1135)
+        .set('IONIA - MI', 1200)
+        .set('JACKSON - MS', 1060)
+        .set('JACKSONVILLE EAST - FL', 885)
+        .set('JACKSONVILLE WEST - FL', 905)
+        .set('KANSAS CITY - KS', 1210)
+        .set('KINCHELOE - MI', 1575)
+        .set('KNOXVILLE - TN', 1035)
+        .set('LANSING - MI', 1200)
+        .set('LAS VEGAS - NV', 1240)
+        .set('LEXINGTON EAST - KY', 1125)
+        .set('LEXINGTON WEST - KY', 1140)
+        .set('LINCOLN - NE', 1335)
+        .set('LITTLE ROCK - AR', 1175)
+        .set('LONDON - ON', 1415)
+        .set('LONG BEACH - CA', 1090)
+        .set('LONG ISLAND - NY', 925)
+        .set('LONGVIEW - TX', 1000)
+        .set('LOS ANGELES - CA', 1055)
+        .set('LOUISVILLE - KY', 1135)
+        .set('LUFKIN - TX', 975)
+        .set('LYMAN - ME', 1100)
+        .set('MACON - GA', 935)
+        .set('MADISON - WI', 1275)
+        .set('MARTINEZ - CA', 1240)
+        .set('MCALLEN - TX', 1015)
+        .set('MEBANE - NC', 985)
+        .set('MEMPHIS - TN', 1110)
+        .set('MIAMI - FL', 980)
+        .set('MIAMI CENTRAL - FL', 980)
+        .set('MIAMI NORTH - FL', 980)
+        .set('MIAMI SOUTH - FL', 980)
+        .set('MILWAUKEE - WI', 1150)
+        .set('MINNEAPOLIS - MN', 1250)
+        .set('MINNEAPOLIS NORTH - MN', 1225)
+        .set('MOBILE - AL', 1135)
+        .set('MOCKSVILLE - NC', 985)
+        .set('MONTGOMERY - AL', 1160)
+        .set('MONTREAL - QC', 1415)
+        .set('NASHVILLE - TN', 1060)
+        .set('NEW ORLEANS - LA', 1060)
+        .set('NEWBURGH - NY', 900)
+        .set('NORTH BOSTON - MA', 975)
+        .set('NORTH CHARLESTON - SC', 935)
+        .set('NORTH SEATTLE - WA', 1540)
+        .set('OCALA - FL', 955)
+        .set('OGDEN - UT', 1340)
+        .set('OKLAHOMA CITY - OK', 1125)
+        .set('ORLANDO - FL', 980)
+        .set('ORLANDO NORTH - FL', 980)
+        .set('ORLANDO SOUTH - FL', 980)
+        .set('PASCO - WA', 1410)
+        .set('PEORIA - IL', 1200)
+        .set('PHILADELPHIA - PA', 890)
+        .set('PHILADELPHIA EAST - PA', 890)
+        .set('PHILADELPHIA EAST-SUB - PA', 985)
+        .set('PHOENIX - AZ', 1240)
+        .set('PITTSBURG - PA', 1050)
+        .set('PITTSBURGH EAST - PA', 1050)
+        .set('PITTSBURGH NORTH - PA', 1075)
+        .set('PITTSBURGH SOUTH - PA', 1075)
+        .set('PITTSBURGH WEST - PA', 1105)
+        .set('PORTLAND - OR', 1390)
+        .set('PORTLAND NORTH - OR', 1465)
+        .set('PORTLAND SOUTH - OR', 1415)
+        .set('PUNTA GORDA - FL', 1030)
+        .set('RALEIGH - NC', 1000)
+        .set('RANCHO CUCAMONGA - CA', 1110)
+        .set('RENO - NV', 1340)
+        .set('RICHMOND - VA', 1060)
+        .set('RICHMOND EAST - VA', 1105)
+        .set('ROCHESTER - NY', 1050)
+        .set('SACRAMENTO - CA', 1265)
+        .set('SALT LAKE CITY - UT', 1390)
+        .set('SALT LAKE CITY NORTH - UT', 1390)
+        .set('SAN ANTONIO - TX', 1025)
+        .set('SAN BERNARDINO - CA', 1100)
+        .set('SAN DIEGO - CA', 1110)
+        .set('SAN JOSE - CA', 1265)
+        .set('SAVANNAH - GA', 825)
+        .set('SCRANTON - PA', 925)
+        .set('SEAFORD - DE', 990)
+        .set('SHREVEPORT - LA', 1025)
+        .set('SIKESTON - MO', 1210)
+        .set('SO SACRAMENTO - CA', 1265)
+        .set('SOMERVILLE - NJ', 850)
+        .set('SOUTH BOSTON - MA', 975)
+        .set('SOUTHERN ILLINOIS - IL', 1185)
+        .set('SPARTANBURG - SC', 1035)
+        .set('SPOKANE - WA', 1615)
+        .set('SPRINGFIELD - MO', 1185)
+        .set('ST. CLOUD - MN', 1275)
+        .set('ST. LOUIS - MO', 1160)
+        .set('SUN VALLEY - CA', 1090)
+        .set('SYRACUSE - NY', 1000)
+        .set('TALLAHASSEE - FL', 960)
+        .set('TAMPA SOUTH - FL', 980)
+        .set('TANNER - AL', 1135)
+        .set('TIFTON - GA', 935)
+        .set('TORONTO - ON', 1425)
+        .set('TRENTON - NJ', 850)
+        .set('TUCSON - AZ', 1265)
+        .set('TULSA - OK', 1150)
+        .set('VALLEJO - CA', 1265)
+        .set('VAN NUYS - CA', 1265)
+        .set('WACO - TX', 1065)
+        .set('WALTON - KY', 1160)
+        .set('WASHINGTON DC - DC', 950)
+        .set('WEBSTER - NH', 1075)
+        .set('WEST PALM BEACH - FL', 1005)
+        .set('WEST WARREN - MA', 975)
+        .set('WHEELING - IL', 1075)
+        .set('WICHITA - KS', 1225)
+        .set('YORK HAVEN - PA', 975);
+
+    const IaaiDeliveryMap = new Map()
+        .set('ACE - Carson (CA)', 1140)
+        .set('ACE - Perris (CA)', 1140)
+        .set('ADESA Birmingham (AL)', 1035)
+        .set('Abilеne (TX)', 1125)
+        .set('Akron - Canton (OH)', 1100)
+        .set('Albany (NY)', 950)
+        .set('Albuquerque (NM)', 1250)
+        .set('Altoona (PA)', 1065)
+        .set('Amarillo (TX)', 1175)
+        .set('Anaheim (CA)', 1070)
+        .set('Anchorage (AK)', 2050)
+        .set('Appleton (WI)', 1270)
+        .set('Asheville (NC)', 995)
+        .set('Ashland (KY)', 1185)
+        .set('Atlanta (GA)', 935)
+        .set('Atlanta East (GA)', 935)
+        .set('Atlanta North (GA)', 960)
+        .set('Atlanta South (GA)', 935)
+        .set('Austin (TX)', 1000)
+        .set('Avenel New Jersey (NJ)', 825)
+        .set('Baltimore (MD)', 950)
+        .set('Baton Rouge (LA)', 1060)
+        .set('Billings (MT)', 1715)
+        .set('Birmingham (AL)', 1035)
+        .set('Boise (ID)', 1515)
+        .set('Boston-Shirley (MA)', 975)
+        .set('Bowling Green (KY)', 1160)
+        .set('Bridgeport (PA)', 950)
+        .set('Buckhannon (WV)', 1150)
+        .set('Buffalo (NY)', 1100)
+        .set('Burlington (VT)', 1150)
+        .set('Casper (WY)', 1815)
+        .set('Central New Jersey (NJ)', 840)
+        .set('Charleston (SC)', 910)
+        .set('Charlotte (NC)', 935)
+        .set('Chattanooga (TN)', 1060)
+        .set('Chicago - North (IL)', 1150)
+        .set('Chicago - South (IL)', 1150)
+        .set('Chicago - West (IL)', 1150)
+        .set('Cincinnati (OH)', 1125)
+        .set('Cincinnati - South (OH)', 1125)
+        .set('Clearwater (FL)', 960)
+        .set('Cleveland (OH)', 1100)
+        .set('Colton (CA)', 1140)
+        .set('Columbia (SC)', 900)
+        .set('Columbus (OH)', 1100)
+        .set('Concord (NC)', 975)
+        .set('Corpus Christi (TX)', 1035)
+        .set('Culpeper (VA)', 1175)
+        .set('Dallas (TX)', 995)
+        .set('Davenport (IA)', 1225)
+        .set('Dayton (OH)', 1125)
+        .set('Denver (CO)', 1440)
+        .set('Denver East (CO)', 1440)
+        .set('Des Moines (IA)', 1250)
+        .set('Detroit (MI)', 1100)
+        .set('Dothan (AL)', 1160)
+        .set('Dundalk (MD)', 950)
+        .set('East Bay (CA)', 1230)
+        .set('El Paso (TX)', 1150)
+        .set('Englishtown (NJ)', 895)
+        .set('Erie (PA)', 1150)
+        .set('Eugene (OR)', 1415)
+        .set('Fargo (ND)', 1550)
+        .set('Fayetteville (AR)', 1175)
+        .set('Flint (MI)', 1175)
+        .set('Fontana (CA)', 1110)
+        .set('Fort Myers (FL)', 1030)
+        .set('Fort Pierce (FL)', 1005)
+        .set('Fredericksburg South (VA)', 960)
+        .set('Fremont (CA)', 1240)
+        .set('Fresno (CA)', 1190)
+        .set('Ft Worth (TX)', 1000)
+        .set('Grand Rapids (MI)', 1175)
+        .set('Great Lakes (MI)', 1175)
+        .set('Greensboro (NC)', 985)
+        .set('Greenville (SC)', 985)
+        .set('Grenada (MS)', 1110)
+        .set('Gulf Coast (MS)', 1060)
+        .set('Hartford (CT)', 950)
+        .set('Hartford - South (CT)', 950)
+        .set('High Desert (CA)', 1165)
+        .set('Honolulu (HI)', 2540)
+        .set('Houston (TX)', 975)
+        .set('Houston - North (TX)', 975)
+        .set('Houston South (TX)', 975)
+        .set('Houston-North (TX)', 975)
+        .set('Huntsville (AL)', 1135)
+        .set('Indianapolis (IN)', 1175)
+        .set('Jackson (MS)', 1060)
+        .set('Jacksonville (FL)', 885)
+        .set('Kansas City (KS)', 1210)
+        .set('Knoxville (TN)', 1035)
+        .set('Lafayette (LA)', 1175)
+        .set('Las Vegas (NV)', 1240)
+        .set('Laurel (MD)', 1000)
+        .set('Lexington (SC)', 910)
+        .set('Lincoln (IL)', 1225)
+        .set('Little Rock (AR)', 1105)
+        .set('Long Island (NY)', 915)
+        .set('Longview (TX)', 1025)
+        .set('Los Angeles (CA)', 1070)
+        .set('Louisville (KY)', 1135)
+        .set('Louisville North (KY)', 1135)
+        .set('Lubbock (TX)', 1200)
+        .set('Macon (GA)', 960)
+        .set('Manchester (NH)', 1025)
+        .set('McAllen (TX)', 1025)
+        .set('Memphis (TN)', 1110)
+        .set('Metro (DC)', 975)
+        .set('Metro DC (MD)', 975)
+        .set('Miami (FL)', 980)
+        .set('Miami North (FL)', 980)
+        .set('Milwaukee (WI)', 1150)
+        .set('Minneapolis (MN)', 1250)
+        .set('Missoula (MT)', 1740)
+        .set('Nashville (TN)', 1060)
+        .set('New Castle (DE)', 925)
+        .set('New Orleans (LA)', 1085)
+        .set('New Orleans East (LA)', 1085)
+        .set('Newburgh (NY)', 925)
+        .set('North Hollywood (CA)', 1080)
+        .set('Nothern New Jersey (NJ)', 840)
+        .set('Nothern Virginia (VA)', 975)
+        .set('Oklahoma City (OK)', 1125)
+        .set('Omaha (NE)', 1275)
+        .set('Orlando (FL)', 980)
+        .set('Orlando-North (FL)', 980)
+        .set('Paducah (KY)', 1285)
+        .set('Pensacola (FL)', 1030)
+        .set('Permian Basin (TX)', 1150)
+        .set('Philadelphia (PA)', 890)
+        .set('Phoenix (AZ)', 1215)
+        .set('Pittsburgh (PA)', 1075)
+        .set('Pittsburgh - North (PA)', 1075)
+        .set('Portage (WI)', 1225)
+        .set('Portland (OR)', 1415)
+        .set('Portland - Gorham (ME)', 1125)
+        .set('Portland North (OR)', 890)
+        .set('Portland West (OR)', 1415)
+        .set('Providence (RI)', 975)
+        .set('Pulaski (VA)', 1100)
+        .set('Raleigh (NC)', 985)
+        .set('Reno (NV)', 1340)
+        .set('Richmond (VA)', 1050)
+        .set('Roanoke (VA)', 1250)
+        .set('Rochester (NY)', 1050)
+        .set('Rosedale (MD)', 950)
+        .set('SPARTANBURG (SC)', 1020)
+        .set('Sacramento (CA)', 1265)
+        .set('Salt Lake City (UT)', 1390)
+        .set('San Antonio (TX)', 1050)
+        .set('San Antonio-South (TX)', 1050)
+        .set('San Diego (CA)', 1110)
+        .set('Savannah (GA)', 835)
+        .set('Scranton (PA)', 925)
+        .set('Seattle (WA)', 1440)
+        .set('Shady Spring (WV)', 1175)
+        .set('Shreveport (LA)', 1025)
+        .set('Sioux Falls (SD)', 1740)
+        .set('South Bend (IN)', 1175)
+        .set('Southern New Jersey (NJ)', 900)
+        .set('Speciality Division (IL)', 1210)
+        .set('Spokane (WA)', 1615)
+        .set('Springfield (MO)', 1185)
+        .set('St. Louis (IL)', 1185)
+        .set('St. Paul (MN)', 650)
+        .set('Suffolk (VA)', 1100)
+        .set('Syracuse (NY)', 1000)
+        .set('Tampa (FL)', 960)
+        .set('Tampa North (FL)', 980)
+        .set('Taunton (MA)', 975)
+        .set('Templeton (MA)', 1000)
+        .set('Tidewater (VA)', 1025)
+        .set('Tifton (GA)', 950)
+        .set('Tucson (AZ)', 1265)
+        .set('Tulsa (OK)', 1150)
+        .set('Western Colorado (CO)', 1515)
+        .set('Wichita (KS)', 1225)
+        .set('Wilmington (NC)', 985)
+        .set('York Springs (PA)', 950);
+</script>
+
+
+<script>
+    const rates = {
+        usd: 28.3,
+    };
+
+    const crossCurrency = 1.18;
+
+    const auctionStep = 25;
+
+    const auctionRateStartMedian = 2000;
+
+    const PRICES = {
+        SERVICE: 800,
+        INSURANCE: 50,
+        FORWARDER: 380,
+        BROKER: 200,
+        CERTIFICATION: (4500 / rates.usd),
+        DELIVERY_UKRAINE: (6000 / rates.usd),
+    };
+
+    const formElement                   = document.getElementById('form'),
+          currentYearInputElement       = document.getElementById('current_year'),
+          carYearInputElement           = document.getElementById('car_year'),
+          carEngineInputElement         = document.getElementById('car_engine'),
+          auctionTypeIaaiInputElement   = document.getElementById('auction_type_iaai'),
+          auctionTypeCopartInputElement = document.getElementById('auction_type_copart'),
+          auctionPlaceInputElement      = document.getElementById('auction_place'),
+          auctionTaxInputElement        = document.getElementById('auction_tax'),
+          auctionRateInputElement       = document.getElementById('auction_rate'),
+          repairsCostInputElement       = document.getElementById('repairs_cost'),
+          registrationInputElement      = document.getElementById('registration'),
+          taxInputElement               = document.getElementById('tax'),
+          bankInputElement              = document.getElementById('bank'),
+          totalCostInputElement         = document.getElementById('total_cost');
+
+    formElement.addEventListener('submit', e => {
+        e.preventDefault();
+
+        const auctionType = auctionTypeCopartInputElement.checked ? 'copart' : 'iaai';
+
+        const repairsCost = parseInt(repairsCostInputElement.value),
+              totalCost   = parseInt(totalCostInputElement.value);
+
+        let auctionTax   = calcAuctionTax(auctionRateStartMedian, auctionType),
+            tax          = calcTax(
+                auctionRateStartMedian,
+                auctionTax,
+                parseInt(currentYearInputElement.value),
+                parseInt(carYearInputElement.value),
+                parseFloat(carEngineInputElement.value),
+                'gas'
+            ),
+            bank         = calcBank(auctionRateStartMedian, tax),
+            registration = calcRegistration(auctionRateStartMedian, auctionTax),
+            delivery     = calcDelivery(auctionType, auctionPlaceInputElement.value);
+
+
+        let auctionRate = auctionRateStartMedian;
+
+        let recalculatedTotalPrice = calcTotalPrice(
+            PRICES.SERVICE,
+            PRICES.INSURANCE,
+            auctionRate,
+            auctionTax,
+            delivery,
+            PRICES.FORWARDER,
+            PRICES.BROKER,
+            PRICES.DELIVERY_UKRAINE,
+            repairsCost,
+            PRICES.CERTIFICATION,
+            tax,
+            registration,
+            bank,
+        );
+
+        while (recalculatedTotalPrice <= totalCost - 50 || recalculatedTotalPrice >= totalCost + 50) {
+            auctionRate  = calcAuctionRate(auctionRate, recalculatedTotalPrice < totalCost);
+            auctionTax   = calcAuctionTax(auctionRate, auctionType);
+            tax          = calcTax(auctionRate, auctionTax, currentYearInputElement.value, carYearInputElement.value, carEngineInputElement.value, 'gas');
+            bank         = calcBank(auctionRate, auctionTax);
+            registration = calcRegistration(auctionRate, auctionTax);
+
+            recalculatedTotalPrice = calcTotalPrice(
+                PRICES.SERVICE,
+                PRICES.INSURANCE,
+                auctionRate,
+                auctionTax,
+                delivery,
+                PRICES.FORWARDER,
+                PRICES.BROKER,
+                PRICES.DELIVERY_UKRAINE,
+                repairsCost,
+                PRICES.CERTIFICATION,
+                tax,
+                registration,
+                bank,
+            );
+        }
+
+        taxInputElement.value          = Math.round(tax);
+        bankInputElement.value         = Math.round(bank);
+        registrationInputElement.value = Math.round(registration);
+        auctionTaxInputElement.value   = Math.round(auctionTax);
+        auctionRateInputElement.value  = Math.round(auctionRate);
+        totalCostInputElement.value    = Math.round(recalculatedTotalPrice);
+    });
+
+    calcAuctionRate = (rate, increase) => {
+        return increase ? rate + auctionStep : rate - auctionStep;
+    };
+
+    calcTotalPrice = (service, insurance, auctionRate, auctionTax, deliveryUsa, forwarder, broker, deliveryUa, repairsCost, certification, uaTax, registration, bankTax) => {
+        return service + insurance + auctionRate + auctionTax + deliveryUsa + forwarder + broker + deliveryUa + repairsCost + certification + uaTax + registration + bankTax;
+    };
+
+    calcAuctionTax = (auctionRate, auctionType) => {
+        let auctionFeesMap = CopartFees;
+
+        if (auctionType === 'iaai') {
+            auctionFeesMap = IaaiFees;
+        }
+
+        const auctionFeeEntries = auctionFeesMap.entries();
+
+        let result = 0;
+
+        while (result === 0) {
+            const auctionFeeEntry = auctionFeeEntries.next().value;
+
+            if (auctionFeeEntry === undefined) {
+                throw Error('Undefined fee');
+            }
+
+            let [fee, pricingRange] = auctionFeeEntry,
+                [min, max]          = pricingRange;
+
+            if (typeof fee === 'string' && fee.search('%')) {
+                fee = (pricingRange / 100) * parseInt(fee);
+            }
+
+            if (auctionRate >= min && auctionRate <= max) {
+                result = fee + InternetFee + GatewayFee;
+            }
+        }
+
+        return result;
+    };
+
+    calcDelivery = (auctionType, location) => {
+        let locationsMap = CopartDeliveryMap;
+
+        if (auctionType === 'iaai') {
+            locationsMap = IaaiDeliveryMap;
+        }
+
+        return locationsMap.get(location);
+    };
+
+    calcTax = (auctionRate, auctionTax, currentYear, carYear, carEngine, carFuelType) => {
+        const price     = auctionRate + auctionTax,
+              exciseTax = calcExciseTax(currentYear, carYear, carEngine, carFuelType),
+              customsTax = (price / 100) * 10,
+              VAT       = ((price + customsTax + exciseTax) / 100) * 20;
+
+        return VAT + customsTax + exciseTax;
+    };
+
+    calcBank = (auctionRate, auctionTax) => {
+        return (auctionRate + auctionTax) / 55; // todo
+    };
+
+    calcRegistration = (auctionRate, auctionTax) => {
+        return (((auctionRate + auctionTax) / 100) * 3) + 25; // todo 25
+    };
+
+    calcExciseTax = (currentYear, carYear, carEngine, carFuelType) => {
+        const coefficient = carFuelType === 'gas' ? 50 : 75; // todo const
+
+        return ((currentYear - carYear) * carEngine * coefficient) * crossCurrency;
+    };
+</script>
+
+</html>
